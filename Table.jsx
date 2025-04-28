@@ -46,7 +46,7 @@ function TableComponent({ headers, rows, deleteRow }) {
     })
   ]),[headers])
 
-  // Pagination
+  // Pagination 
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const paginationProps = usePagination({ itemsPerPage: rowsPerPage, totalItems: rows.length })
   const { currentItemIndex, itemsPerPage, totalItems, setCurrentPage } = paginationProps
