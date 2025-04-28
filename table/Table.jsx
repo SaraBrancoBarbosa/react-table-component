@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 import { Fragment, useMemo, useState } from "react"
 import Column from "./Column"
-import ModalComponent from "../modal/Modal"
+import ModalComponent from "../../modal/Modal"
 import SearchBar from "./SearchBar"
 import usePagination from "./pagination/usePagination"
 import Pagination from "./pagination/Pagination"
