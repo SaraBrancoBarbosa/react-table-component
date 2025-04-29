@@ -7,7 +7,8 @@ import usePagination from "./pagination/usePagination"
 import Pagination from "./pagination/Pagination"
 import ShowEntriesOptions from "./ShowEntriesOptions"
 import DeleteItem from "./deleteItem"
-import "./table.css"
+import SortItem from "./SortItem"
+import "./index.css"
 
 // Date conversion 
 Date.prototype.tableDate = function() {
@@ -87,7 +88,7 @@ function TableComponent({ headers, rows, deleteRow }) {
         return compareNumbers(valueA, valueB)
       }
 
-      return 0 // default comparison if types don't match
+      return 0
     })
 
     // Reverse the order if it's descending
@@ -98,24 +99,6 @@ function TableComponent({ headers, rows, deleteRow }) {
   const currentRows = useMemo(() => (
    sortedRows.slice(currentItemIndex, Math.min(currentItemIndex + itemsPerPage, totalItems))
   ), [sortedRows, currentItemIndex, itemsPerPage, totalItems])
-
-  // Handle column header click (sorting)
-  const handleSort = (key) => {
-    setSortConfig(prevState => {
-      if (prevState.key === key) {
-        // Toggle direction if same column clicked
-        return {
-          key,
-          direction: prevState.direction === "asc" ? "desc" : "asc",
-        }
-      }
-      // Default to ascending if new column
-      return {
-        key,
-        direction: "asc",
-      }
-    })
-  }
 
   // To open the "confirm deletion" modal
   const [rowToDelete, setRowToDelete] = useState(null)
@@ -147,11 +130,9 @@ function TableComponent({ headers, rows, deleteRow }) {
             {columnHeaders.map((column, index) => (
               <Fragment key={`column-${index}`}>
                 {column.visible && (
-                  <th key={index} onClick={() => handleSort(index)}>
+                  <th key={index} >
                     {column.name}
-                    <span className="sort-symbol">
-                      {sortConfig.key === index && (sortConfig.direction === "asc" ? "↑" : "↓")}
-                    </span>
+                    <SortItem setSortConfig={setSortConfig} sortConfig={sortConfig} index={index} />
                   </th>
                 )}
               </Fragment>
