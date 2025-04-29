@@ -41,7 +41,7 @@
   color: white;
   border-radius: 5px;
 }
-.table_wrapper .entries-and-search .table-pagination .change-page, .table_wrapper .info-and-pagination .table-pagination .change-page {
+.table_wrapper .entries-and-search .table-pagination .previous-page, .table_wrapper .entries-and-search .table-pagination .next-page, .table_wrapper .info-and-pagination .table-pagination .previous-page, .table_wrapper .info-and-pagination .table-pagination .next-page {
   cursor: pointer;
 }
 .table_wrapper .entries-and-search .table-pagination .disabled, .table_wrapper .info-and-pagination .table-pagination .disabled {

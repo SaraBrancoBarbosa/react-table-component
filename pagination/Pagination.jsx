@@ -20,29 +20,29 @@ function Pagination({
 
         {/* Previous and next page + the current page */}
         <nav className="table-pagination">
-          <Link
+          <a
             onClick={() => {
               // To forbid the click when on the first page
               if (currentPage > 0) setCurrentPage(currentPage - 1)
             }}
-            className={currentPage === 0 ? "disabled" : "change-page"}
+            className={currentPage === 0 ? "disabled" : "previous-page"}
           >
             Previous
-          </Link>
+          </a>
 
           <span className="current-page">
             {currentPage + 1}
           </span>
 
-          <Link 
+          <a 
             // To forbid the click when on the last page
             onClick={() => {
               if (currentPage < pagesCount -1) setCurrentPage(currentPage + 1)
             }}
-            className={currentPage >= pagesCount -1 ? "disabled" : "change-page"}
+            className={currentPage >= pagesCount -1 ? "disabled" : "next-page"}
           >
             Next
-          </Link>
+          </a>
         </nav>
     </>
   )
