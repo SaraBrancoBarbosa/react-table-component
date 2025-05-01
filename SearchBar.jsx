@@ -11,14 +11,14 @@ function SearchBar({ setFilterText, setCurrentPage }) {
 
   return (
     <div style={{padding: 2}}>
-        <label>
+      <label>
         Search: {" "}
         <input 
             type="search" 
             placeholder="" 
             onChange={handleFilterChange}
         />
-        </label>
+      </label>
     </div>
   )
 }

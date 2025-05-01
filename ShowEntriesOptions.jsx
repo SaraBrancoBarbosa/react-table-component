@@ -11,19 +11,19 @@ function ShowEntriesOptions({setRowsPerPage, rowsPerPage, setCurrentPage }) {
   
   return (
     <div>
-        <label>
+      <label>
         Show {" "}
         <select
-            value={rowsPerPage}
-            onChange={handleRowsPerPageChange}
+          value={rowsPerPage}
+          onChange={handleRowsPerPageChange}
         >
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
         </select>{" "}
         entries
-        </label>
+      </label>
     </div>
   )
 }
