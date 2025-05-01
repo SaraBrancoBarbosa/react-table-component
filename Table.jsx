@@ -8,6 +8,7 @@ import Pagination from "./pagination/Pagination"
 import ShowEntriesOptions from "./ShowEntriesOptions"
 import DeleteItem from "./deleteItem"
 import SortItem from "./SortItem"
+import useSort from "./hooks/useSort"
 import "./index.css"
 
 // Date conversion 
@@ -19,86 +20,63 @@ Date.prototype.tableDate = function() {
   return [year,month,day].join("/")
 }
 
-// Numbers comparison (for the sort)
-const compareNumbers = (a, b) => a - b
+// To format the columns
+const formatHeaders = (headers) => ([
+  {
+    // A column for the rows indexation
+    name: "internalIndex", 
+    visible: false,
+    filterable: false,
+    type: "number",
+    columnId: 0,
+  },
+  // Each element is transformed to string type (visible by default)
+  ...headers.map((header, index) => {
+    const value = typeof header === "string"
+      ? {columnId: index+1, name: header, type: "string", visible:true} 
+      : {columnId: index+1, ...header, visible: header.visible !== undefined ? header.visible: true}
+
+    return value
+  })
+])
 
 function TableComponent({ headers, rows, deleteRow }) {
-  
-  // To sort the columns in asc and desc order
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" })
+  const columnHeaders = useMemo(() => formatHeaders(headers),[headers])
 
-  // To format the columns
-  // useMemo : to memorise the changes and not to recompute all the elements 
-  const columnHeaders = useMemo(() => ([
-    {
-      // A column for the rows indexation
-      name: "internalIndex", 
-      visible: false,
-      filterable: false,
-      type: "number"
-    },
-    // Each element is transformed to string type (visible by default)
-    ...headers.map(header => {
-      const value = typeof header === "string"
-        ? {name: header, type: "string", visible:true} 
-        : {...header, visible: header.visible !== undefined ? header.visible: true}
-
-      return value
-    })
-  ]),[headers])
+  const indexedRows = useMemo(() => (
+    rows.map((row, internalIndex) => ([internalIndex, ...row]))
+  ), [rows])
 
   // Pagination 
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const paginationProps = usePagination({ itemsPerPage: rowsPerPage, totalItems: rows.length })
+  const paginationProps = usePagination({ itemsPerPage: rowsPerPage, totalItems: indexedRows.length })
   const { currentItemIndex, itemsPerPage, totalItems, setCurrentPage } = paginationProps
 
   // Table containing the filterable columns indexes to extract them 
   const filterableColumns = useMemo(() => (
-    columnHeaders.filter(header => header.filterable === true).map((_, index) => index)
+    columnHeaders.filter(header => header.filterable === true).map(header => header.columnId)
   ), [columnHeaders])
-  
+
+  // Sort hook
+  const {sortConfig, setSortConfig, sortedRows} = useSort(indexedRows, columnHeaders)
+
   // Search bar text
   const [filterText, setFilterText] = useState("")
 
   // To filter the columns's data (search bar)
   const filteredRows = useMemo(() => (
-    rows.filter((row) => {
-      return filterableColumns.some((fieldIndex) => 
-        row[fieldIndex].toLowerCase().includes(filterText.toLowerCase())
+    filterText === "" ? sortedRows : 
+    sortedRows.filter((row) => {
+      return filterableColumns.some((columnId) => 
+        row[columnId].toLowerCase().includes(filterText.toLowerCase())
       )
-    // To add internalIndex to each row once the filter is done
-    }).map((row, internalIndex) => ([internalIndex, ...row]))
-  ), [filterText, filterableColumns, rows])
-
-  // Sorting function
-  const sortedRows = useMemo(() => {
-    if (!sortConfig.key) return filteredRows
-
-    const sorted = [...filteredRows].sort((a, b) => {
-      const valueA = a[sortConfig.key]
-      const valueB = b[sortConfig.key]
-
-      // To compare the strings => localeCompare
-      if (typeof valueA === "string" && typeof valueB === "string") {
-        return valueA.localeCompare(valueB)
-      }
-
-      // To compare the numbers => compareNumbers
-      if (typeof valueA === "number" && typeof valueB === "number") {
-        return compareNumbers(valueA, valueB)
-      }
-
-      return 0
     })
-
-    // Reverse the order if it's descending
-    return sortConfig.direction === "desc" ? sorted.reverse() : sorted
-  }, [filteredRows, sortConfig])
+  ), [filterText, filterableColumns, sortedRows])
 
   // To get the current rows (after sorting)
   const currentRows = useMemo(() => (
-   sortedRows.slice(currentItemIndex, Math.min(currentItemIndex + itemsPerPage, totalItems))
-  ), [sortedRows, currentItemIndex, itemsPerPage, totalItems])
+   filteredRows.slice(currentItemIndex, Math.min(currentItemIndex + itemsPerPage, totalItems))
+  ), [filteredRows, currentItemIndex, itemsPerPage, totalItems])
 
   // To open the "confirm deletion" modal
   const [rowToDelete, setRowToDelete] = useState(null)
@@ -124,7 +102,7 @@ function TableComponent({ headers, rows, deleteRow }) {
       {/* Table */}
       <table role="grid">
         
-        {/* Columns names (first row) */}
+        {/* Columns names */}
         <thead>
           <tr role="row">
             {columnHeaders.map((column, index) => (
