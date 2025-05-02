@@ -43,12 +43,10 @@ function TableComponent({
   headers, 
   rows, 
   deleteRow,
-  // If you don't want to use one of these features, enter "false"
   showPagination = true,
-  showSearch = true,
-  showSort = true,
+  showSearchBar = true,
+  showSortItem = true,
   showDeleteItem = true,
-  // If you have your own modal/a modal library, you can use it to confirm or cancel the deletion
   modalComponent: ModalComponentCustom
 }) {
   
@@ -114,7 +112,7 @@ function TableComponent({
         )}
         
         {/* Search bar */}
-        {showSearch && (
+        {showSearchBar && (
           <SearchBar 
             setFilterText={setFilterText}
             setCurrentPage={setCurrentPage}
@@ -133,7 +131,7 @@ function TableComponent({
                 {column.visible && (
                   <th key={index} >
                     {column.name}
-                    {showSort && (
+                    {showSortItem && (
                       <SortItem setSortConfig={setSortConfig} sortConfig={sortConfig} index={index} />
                     )}
                   </th>
