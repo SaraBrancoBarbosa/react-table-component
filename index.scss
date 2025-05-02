@@ -40,7 +40,7 @@
     }
 
     table {
-        display: block;
+        display: table;
         max-width: 100%; 
         width: 100%;
         overflow-x: auto;
@@ -85,6 +85,12 @@
         }
     }
     
+    @media screen and (max-width: 1000px) {
+        table {
+            display: block;
+        }      
+    } 
+
     @media screen and (max-width: 385px) {
         .entries-and-search, .info-and-pagination {
             display: flex;
