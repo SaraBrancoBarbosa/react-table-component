@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 
 function SortItem({setSortConfig, sortConfig, index}) {
 
@@ -5,6 +6,7 @@ function SortItem({setSortConfig, sortConfig, index}) {
   const handleSort = (index) => {
     setSortConfig(prevState => ({
       ...prevState,
+      key: index,
       direction: prevState.key === index ? 
       // Toggle direction if same column clicked
       prevState.direction === "asc" ? "desc" : "asc"
@@ -20,30 +22,13 @@ function SortItem({setSortConfig, sortConfig, index}) {
   )
 }
 
-export default SortItem
-
-/*
-function SortItem({setSortConfig, sortConfig, columnId}) {
-
-  // Handle column header click (sorting)
-  const handleSort = (columnId) => {
-    setSortConfig(prevState => ({
-      ...prevState,
-      key: columnId,
-      direction: prevState.key === columnId ? 
-      // Toggle direction if same column clicked
-      prevState.direction === "asc" ? "desc" : "asc"
-      // Default to ascending if new column
-      : "asc",
-    }))
-  }
-  
-  return (
-    <span className="sort-symbol" onClick={() => handleSort(columnId)}>
-      {sortConfig.key === columnId ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}
-    </span>
-  )
+SortItem.propTypes = {
+  setSortConfig: PropTypes.func.isRequired,
+  sortConfig: PropTypes.shape({
+    key: PropTypes.number,
+    direction: PropTypes.oneOf(["asc", "desc"])
+  }).isRequired,
+  index: PropTypes.number.isRequired
 }
 
 export default SortItem
-*/
