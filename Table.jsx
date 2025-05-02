@@ -1,7 +1,6 @@
 import PropTypes from "prop-types"
 import { Fragment, useMemo, useState } from "react"
 import Column from "./Column"
-import ModalComponent from "../modal/Modal"
 import SearchBar from "./SearchBar"
 import usePagination from "./pagination/usePagination"
 import Pagination from "./pagination/Pagination"
@@ -40,7 +39,19 @@ const formatHeaders = (headers) => ([
   })
 ])
 
-function TableComponent({ headers, rows, deleteRow }) {
+function TableComponent({ 
+  headers, 
+  rows, 
+  deleteRow,
+  // If you don't want to use one of these features, enter "false"
+  showPagination = true,
+  showSearch = true,
+  showSort = true,
+  showDeleteItem = true,
+  // If you have your own modal/a modal library, you can use it to confirm or cancel the deletion
+  modalComponent: ModalComponentCustom
+}) {
+  
   const columnHeaders = useMemo(() => formatHeaders(headers),[headers])
 
   const indexedRows = useMemo(() => (
@@ -81,22 +92,34 @@ function TableComponent({ headers, rows, deleteRow }) {
   // To open the "confirm deletion" modal
   const [rowToDelete, setRowToDelete] = useState(null)
 
+  const handleDelete = (index) => {
+    if (ModalComponentCustom) {
+      setRowToDelete(index) // Ouvre la modal si une modal est fournie
+    } else {
+      deleteRow(index) // Suppression directe si pas de modal
+    }
+  }
+
   return (
     <div className="table_wrapper">
 
       <div className="entries-and-search">
         {/* To choose the number of entries to show per page */}
-        <ShowEntriesOptions
-          rowsPerPage={rowsPerPage} 
-          setRowsPerPage={setRowsPerPage}
-          setCurrentPage={setCurrentPage}
-        />
+        {showPagination && (
+          <ShowEntriesOptions
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
         
         {/* Search bar */}
-        <SearchBar 
-          setFilterText={setFilterText}
-          setCurrentPage={setCurrentPage}
-        />
+        {showSearch && (
+          <SearchBar 
+            setFilterText={setFilterText}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </div>
 
       {/* Table */}
@@ -110,12 +133,14 @@ function TableComponent({ headers, rows, deleteRow }) {
                 {column.visible && (
                   <th key={index} >
                     {column.name}
-                    <SortItem setSortConfig={setSortConfig} sortConfig={sortConfig} index={index} />
+                    {showSort && (
+                      <SortItem setSortConfig={setSortConfig} sortConfig={sortConfig} index={index} />
+                    )}
                   </th>
                 )}
               </Fragment>
             ))}
-            {deleteRow && (
+            {showDeleteItem && deleteRow && (
               <th key="button-delete">
                 Delete
               </th>
@@ -138,10 +163,9 @@ function TableComponent({ headers, rows, deleteRow }) {
               ))}
 
               {/* Button to delete the row data. The 9th row is used for the data id */}
-              {deleteRow && (
+              {showDeleteItem && deleteRow && (
                 <td style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
-                  {/* Opens the "confirm deletion" modal */}
-                  <button onClick={() => setRowToDelete(index)}
+                  <button onClick={() => handleDelete(index)}
                     type="button" 
                     className="button button-delete" 
                   >
@@ -155,26 +179,30 @@ function TableComponent({ headers, rows, deleteRow }) {
       </table>
 
       {/* Pagination */}
-      <div className="info-and-pagination">
-          <Pagination
-            {...paginationProps}
-          />
-      </div>
+      {showPagination && (
+        <div className="info-and-pagination">
+          <Pagination {...paginationProps} />
+        </div>
+      )}
 
       {/* Modal when deleting an employee: confirm deletion */}
-      <ModalComponent
-        //To open the modal only when a row is about to be deleted
-        isOpen={rowToDelete !== null}
-        onRequestClose={() => setRowToDelete(null)}
-        title="Confirm Deletion"
-        message="Are you sure you want to definitely delete this employee?"
-      >
-        <DeleteItem
-          rowToDelete={rowToDelete}
-          deleteRow={deleteRow}
-          setRowToDelete={setRowToDelete}
-        />
-      </ModalComponent>
+      {ModalComponentCustom && rowToDelete !== null && (
+        <ModalComponentCustom
+          // To open the modal only when a row is about to be deleted
+          isOpen={rowToDelete !== null}
+          onRequestClose={() => setRowToDelete(null)}
+          title="Confirm Deletion"
+          message="Are you sure you want to delete this item?"
+        >
+          <DeleteItem
+            rowToDelete={rowToDelete}
+            deleteRow={deleteRow}
+            setRowToDelete={setRowToDelete}
+            // To close the modal if used
+            onClose={() => setRowToDelete(null)}
+          />
+        </ModalComponentCustom>
+      )}
 
     </div>
     
