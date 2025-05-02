@@ -4,10 +4,10 @@ import { useCallback } from "react"
 function ShowEntriesOptions({setRowsPerPage, rowsPerPage, setCurrentPage }) {
   
   // To manage the entries to show
-    const handleRowsPerPageChange = useCallback((e) => {
-      setRowsPerPage(Number(e.target.value))
-      setCurrentPage(0)
-    },[setRowsPerPage, setCurrentPage])
+  const handleRowsPerPageChange = useCallback((e) => {
+    setRowsPerPage(Number(e.target.value))
+    setCurrentPage(0)
+  },[setRowsPerPage, setCurrentPage])
   
   return (
     <div>

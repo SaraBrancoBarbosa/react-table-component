@@ -14,9 +14,9 @@ function SearchBar({ setFilterText, setCurrentPage }) {
       <label>
         Search: {" "}
         <input 
-            type="search" 
-            placeholder="" 
-            onChange={handleFilterChange}
+          type="search" 
+          placeholder="" 
+          onChange={handleFilterChange}
         />
       </label>
     </div>
