@@ -1,10 +1,14 @@
 import PropTypes from "prop-types"
 
-function DeleteItem({ rowToDelete, deleteRow, setRowToDelete  }) {
+function DeleteItem({ rowToDelete, deleteRow, setRowToDelete, onClose  }) {
 
     // To cancel the row data deletion
     const handleCancelDelete = () => {
         setRowToDelete(null)
+        // If using a modal: close it with onClose
+        if (onClose) {
+            onClose()
+        }
     }
 
     // To confirm the row data deletion
@@ -27,6 +31,7 @@ DeleteItem.propTypes = {
     rowToDelete: PropTypes.number,
     deleteRow: PropTypes.func.isRequired,
     setRowToDelete: PropTypes.func.isRequired,
+    onClose: PropTypes.func
 }
 
 export default DeleteItem
