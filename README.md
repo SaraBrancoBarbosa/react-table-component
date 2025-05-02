@@ -17,10 +17,23 @@ Install the plugin: <br>
 
 ### Using the Table component
 ```jsx
+import { TableComponent } from "barbosa-react-table-component"
+
+const headers = [
+    "Name", 
+    "Age", 
+    "Address"
+]
+
+const rows = [
+  ["Janeen", 30, "1 Paget Street"],
+  ["Fabiano", 25, "6752 Bayside Parkway"],
+]
+
 <TableComponent 
     headers={headers} 
-    rows={data} 
-    deleteRow={deleteEmployee}
+    rows={rows} 
+    deleteRow={deleteRowFunction}
     // If you don't want to use one of these features, enter {false}
     showPagination = {true}
     showSearchBar = {true}
