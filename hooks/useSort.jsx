@@ -1,35 +1,58 @@
 import { useEffect, useState } from "react"
 
-// Numbers comparison (for the sort)
-const compareNumbers = (a, b) => a - b
-
 const handleSort = (rows, config, headers) => {
     const key = config.key
     if (!key) return [...rows]
 
-    if (headers[key].sort) {
-        return [...rows].sort(headers[key].sort)
+    // For the date columns: conversion to Date object when date type
+    if (headers[key].type === "date") {
+        return [...rows].sort((a, b) => {
+            const valueA = new Date(a[key])
+            const valueB = new Date(b[key])
+
+            return config.direction === "asc" ? valueA - valueB : valueB - valueA
+        })
+    }
+
+    // For the numbers: conversion to Number object
+    if (headers[key].type === "number") {
+        return [...rows].sort((a, b) => {
+            const valueA = Number(a[key])
+            const valueB = Number(b[key])
+
+            return config.direction === "asc" ? valueA - valueB : valueB - valueA
+        })
+    }
+
+    // For the mixed texts and numbers columns
+    const extractNumberFromString = (str) => {
+        // To extract the number
+        const match = str.match(/^(\d+)/)
+        // Return the number. If no number => NaN
+        return match ? parseInt(match[0], 10) : NaN
     }
     
     const sorted = [...rows].sort((a, b) => {
         const valueA = a[key]
         const valueB = b[key]
 
-        // To compare the strings => localeCompare
-        if (typeof valueA === "string" && typeof valueB === "string") {
-            return valueA.localeCompare(valueB)
+        // If values are numeric (or can be interpreted as numbers)
+        const numberA = extractNumberFromString(valueA)
+        const numberB = extractNumberFromString(valueB)
+
+        if (!isNaN(numberA) && !isNaN(numberB)) {
+            // If both have numbers => compare them
+            return config.direction === "asc" ? numberA - numberB : numberB - numberA
         }
 
-        // To compare the numbers => compareNumbers
-        if (typeof valueA === "number" && typeof valueB === "number") {
-            return compareNumbers(valueA, valueB)
-        }
+        // If both are strings (or without numbers) => localeCompare
+        return config.direction === "asc"
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA)
 
-        return 0
     })
 
-    // Reverse the order if it's descending
-    return config.direction === "desc" ? sorted.reverse() : sorted
+    return sorted
 }
 
 const useSort = (rows, headers) => {
