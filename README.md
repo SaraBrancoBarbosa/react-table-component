@@ -19,15 +19,21 @@ Install the plugin: <br>
 ```jsx
 import { TableComponent } from "barbosa-react-table-component"
 
+/***
+For the columns you want to filter with the search bar, add "filterable: true"
+For the columns you want to hide, add "visible: false"
+Add the according type: "number", "date" or "string" (string by default)
+***/
 const headers = [
-    "Name", 
-    "Age", 
-    "Address"
+    {name:"First Name", filterable: true}, 
+    {name:"Age", type:"number"},
+    "Address",
+    {name:"Id", type:"string", visible:false}
 ]
 
 const rows = [
-  ["Janeen", 30, "1 Paget Street"],
-  ["Fabiano", 25, "6752 Bayside Parkway"],
+  ["Janeen", 30, "1 Paget Street", "1"],
+  ["Fabiano", 25, "6752 Bayside Parkway", "2"],
 ]
 
 <TableComponent 

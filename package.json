@@ -1,6 +1,6 @@
 {
     "name": "barbosa-react-table-component",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A table plugin to list your data on React",
     "main": "index.js",
     "scripts": {
@@ -19,10 +19,6 @@
       "delete data"
     ],
     "author": "Sara Branco Barbosa",
-    "license": "MIT",
-    "dependencies": {
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
-      }
+    "license": "MIT"
   }
   
