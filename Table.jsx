@@ -47,6 +47,7 @@ function TableComponent({
   showSearchBar = true,
   showSortItem = true,
   showDeleteItem = true,
+  getId,
   modalComponent: ModalComponentCustom
 }) {
   
@@ -91,10 +92,15 @@ function TableComponent({
   const [rowToDelete, setRowToDelete] = useState(null)
 
   const handleDelete = (index) => {
+    const row = currentRows[index]
+    const dataId = getId(row)
+    
     if (ModalComponentCustom) {
-      setRowToDelete(index) // Ouvre la modal si une modal est fournie
+      // To open the modal if there is one
+      setRowToDelete(dataId)
     } else {
-      deleteRow(index) // Suppression directe si pas de modal
+      // If no modal: immediate deletion
+      deleteRow(dataId)
     }
   }
 
