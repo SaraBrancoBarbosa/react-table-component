@@ -1,24 +1,23 @@
 {
     "name": "barbosa-react-table-component",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A table plugin to list your data on React",
     "main": "index.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/SaraBrancoBarbosa/react-table-component.git"
+        "type": "git",
+        "url": "git+https://github.com/SaraBrancoBarbosa/react-table-component.git"
     },
     "keywords": [
-      "react",
-      "table",
-      "pagination",
-      "sorting",
-      "search bar",
-      "delete data"
+        "react",
+        "table",
+        "pagination",
+        "sorting",
+        "search bar",
+        "delete data"
     ],
     "author": "Sara Branco Barbosa",
     "license": "MIT"
-  }
-  
+}
