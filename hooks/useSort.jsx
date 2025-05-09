@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const handleSort = (rows, config, headers) => {
+const applySort = (rows, config, headers) => {
     const key = config.key
     if (!key) return [...rows]
 
@@ -61,7 +61,7 @@ const useSort = (rows, headers) => {
     const [sortedRows, setSortedRows] = useState([...rows])
     
     useEffect(() => {
-        const sorted = handleSort(rows, sortConfig, headers)
+        const sorted = applySort(rows, sortConfig, headers)
         setSortedRows(sorted)
     }, [rows, sortConfig, headers])
     
