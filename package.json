@@ -1,6 +1,6 @@
 {
     "name": "barbosa-react-table-component",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "A table plugin to list your data on React",
     "main": "index.js",
     "scripts": {
