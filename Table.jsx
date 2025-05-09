@@ -5,12 +5,11 @@ import SearchBar from "./SearchBar"
 import usePagination from "./pagination/usePagination"
 import Pagination from "./pagination/Pagination"
 import ShowEntriesOptions from "./ShowEntriesOptions"
-import DeleteItem from "./deleteItem"
 import SortItem from "./SortItem"
 import useSort from "./hooks/useSort"
 import "./index.css"
 
-// Date conversion 
+// To convert the date to the format "YYYY/MM/DD"
 Date.prototype.tableDate = function() {
   const month = (""+(this.getMonth()+1)).padStart(2,"0")
   const day = (""+this.getDate()).padStart(2,"0")
@@ -19,7 +18,7 @@ Date.prototype.tableDate = function() {
   return [year,month,day].join("/")
 }
 
-// To format the columns
+// To format the columns headers by adding properties: column ID, type, and visibility
 const formatHeaders = (headers) => ([
   {
     // A column for the rows indexation
@@ -42,27 +41,27 @@ const formatHeaders = (headers) => ([
 function TableComponent({ 
   headers, 
   rows, 
-  deleteRow,
   showPagination = true,
   showSearchBar = true,
   showSortItem = true,
-  showDeleteItem = true,
   getId,
-  modalComponent: ModalComponentCustom
+  onDelete = null
 }) {
   
+  // To format the headers and store them in columnHeaders
   const columnHeaders = useMemo(() => formatHeaders(headers),[headers])
 
+  // To add an internal index to each row and memoize the result
   const indexedRows = useMemo(() => (
     rows.map((row, internalIndex) => ([internalIndex, ...row]))
   ), [rows])
 
-  // Pagination 
+  // To set up pagination for the table rows (items per page and current page)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const paginationProps = usePagination({ itemsPerPage: rowsPerPage, totalItems: indexedRows.length })
   const { currentItemIndex, itemsPerPage, totalItems, setCurrentPage } = paginationProps
 
-  // Table containing the filterable columns indexes to extract them 
+  // To extract the indexes of the columns that are filterable
   const filterableColumns = useMemo(() => (
     columnHeaders.filter(header => header.filterable === true).map(header => header.columnId)
   ), [columnHeaders])
@@ -73,7 +72,7 @@ function TableComponent({
   // Search bar text
   const [filterText, setFilterText] = useState("")
 
-  // To filter the columns's data (search bar)
+  // To filter the rows based on the search bar text (applied to filterable columns)
   const filteredRows = useMemo(() => (
     filterText === "" ? sortedRows : 
     sortedRows.filter((row) => {
@@ -83,25 +82,17 @@ function TableComponent({
     })
   ), [filterText, filterableColumns, sortedRows])
 
-  // To get the current rows (after sorting)
+  // To get the rows to be displayed (after filtering and applying pagination)
   const currentRows = useMemo(() => (
    filteredRows.slice(currentItemIndex, Math.min(currentItemIndex + itemsPerPage, totalItems))
   ), [filteredRows, currentItemIndex, itemsPerPage, totalItems])
 
-  // To open the "confirm deletion" modal
-  const [rowToDelete, setRowToDelete] = useState(null)
-
+  // To handle row deletion by passing the row's ID to the onDelete callback
   const handleDelete = (index) => {
     const row = currentRows[index]
     const dataId = getId(row)
     
-    if (ModalComponentCustom) {
-      // To open the modal if there is one
-      setRowToDelete(dataId)
-    } else {
-      // If no modal: immediate deletion
-      deleteRow(dataId)
-    }
+    onDelete?.(dataId)
   }
 
   return (
@@ -144,7 +135,7 @@ function TableComponent({
                 )}
               </Fragment>
             ))}
-            {showDeleteItem && deleteRow && (
+            {onDelete && (
               <th key="button-delete">
                 Delete
               </th>
@@ -167,7 +158,7 @@ function TableComponent({
               ))}
 
               {/* Button to delete the row data. The 9th row is used for the data id */}
-              {showDeleteItem && deleteRow && (
+              {onDelete && (
                 <td style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
                   <button onClick={() => handleDelete(index)}
                     type="button" 
@@ -189,34 +180,19 @@ function TableComponent({
         </div>
       )}
 
-      {/* Modal when deleting an employee: confirm deletion */}
-      {ModalComponentCustom && rowToDelete !== null && (
-        <ModalComponentCustom
-          // To open the modal only when a row is about to be deleted
-          isOpen={rowToDelete !== null}
-          onRequestClose={() => setRowToDelete(null)}
-          title="Confirm Deletion"
-          message="Are you sure you want to delete this item?"
-        >
-          <DeleteItem
-            rowToDelete={rowToDelete}
-            deleteRow={deleteRow}
-            setRowToDelete={setRowToDelete}
-            // To close the modal if used
-            onClose={() => setRowToDelete(null)}
-          />
-        </ModalComponentCustom>
-      )}
-
     </div>
     
   )
 }
 
 TableComponent.propTypes = {
-  columns: PropTypes.array.isRequired,
+  headers: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
-  deleteRow: PropTypes.func.isRequired,
+  showPagination: PropTypes.bool,
+  showSearchBar: PropTypes.bool,
+  showSortItem: PropTypes.bool,
+  getId: PropTypes.func,
+  onDelete: PropTypes.func,
 }
 
 export default TableComponent
