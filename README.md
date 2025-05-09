@@ -5,7 +5,7 @@ A table plugin to efficiently list your data on React!
 - Pagination (+ number of entries)
 - Search bar
 - Sort items
-- Delete item
+- Delete item (button only)
 
 ## How to use the plugin
 ### Prerequisite
@@ -36,33 +36,34 @@ const rows = [
   ["Fabiano", 25, "6752 Bayside Parkway", "2"],
 ]
 
-// To get the id of the item depending on its column (for the deletion)
-  const getId = (row) => row[4]
-
 <TableComponent 
     headers={headers} 
     rows={rows} 
-    deleteRow={deleteRowFunction}
     // If you don't want to use one of these features, enter {false}
     showPagination = {true}
     showSearchBar = {true}
     showSortItem = {true}
-    showDeleteItem = {true}
+    // If you have a delete data system
     getId={getId}
-    // If you have your own modal/a modal library, you can use it to confirm or cancel the deletion. If you don't, the deletion will be immediate.
-    modalComponent={customModal}
+    onDelete = {dataId}
 />
 ```
 <br>
-Exemple of how to use your modal:
+The table provides a delete button, but doesn't delete rows itself. You must handle the actual data update yourself:
 <br>
 
 ```jsx
-import ModalComponent from "your component path"
+// The id is in the 4th column in our example (index 3)
+const getId = (row) => row[3]
 
-const customModal = (props) => (
-  <ModalComponent {...props}>
-    {props.children}
-  </ModalComponent>
-)
+// Your deletion system
+const handleDelete = (id) => {
+  // Your code
+}
+
+<TableComponent 
+  // The other elements...
+  getId={getId}
+  onDelete={handleDelete}
+/>
 ```
