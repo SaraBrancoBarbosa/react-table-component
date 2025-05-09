@@ -1,5 +1,4 @@
 import PropTypes from "prop-types"
-import { Link } from "react-router"
 
 function Pagination({
     itemsPerPage = 10,
@@ -19,31 +18,29 @@ function Pagination({
         </div>
 
         {/* Previous and next page + the current page */}
-        <nav className="table-pagination">
-          <a
-            onClick={() => {
+        <div className="table-pagination">
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
               // To forbid the click when on the first page
-              if (currentPage > 0) setCurrentPage(currentPage - 1)
-            }}
-            className={currentPage === 0 ? "disabled" : "previous-page"}
+              disabled={currentPage === 0}
+              className="previous-page"
           >
             Previous
-          </a>
+          </button>
 
           <span className="current-page">
             {currentPage + 1}
           </span>
 
-          <a 
+          <button 
             // To forbid the click when on the last page
-            onClick={() => {
-              if (currentPage < pagesCount -1) setCurrentPage(currentPage + 1)
-            }}
-            className={currentPage >= pagesCount -1 ? "disabled" : "next-page"}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage >= pagesCount -1}
+            className="next-page"
           >
             Next
-          </a>
-        </nav>
+          </button>
+        </div>
     </>
   )
 }

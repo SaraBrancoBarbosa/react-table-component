@@ -25,16 +25,8 @@
                 border-radius: 5px;
             }
 
-            .previous-page, .next-page {
+            button:not([disabled]) {
                 cursor: pointer;
-            }
-
-            .disabled {
-                color: grey;
-
-                &:hover {
-                    text-decoration: none;
-                }
             }
         }
     }
