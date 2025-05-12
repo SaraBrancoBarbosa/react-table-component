@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
-var _react = require("react");
 var _Column = _interopRequireDefault(require("./Column"));
 var _SearchBar = _interopRequireDefault(require("./SearchBar"));
 var _usePagination = _interopRequireDefault(require("./pagination/usePagination"));
@@ -16,6 +16,7 @@ var _SortItem = _interopRequireDefault(require("./SortItem"));
 var _useSort2 = _interopRequireDefault(require("./hooks/useSort"));
 require("./index.css");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, "default": e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
@@ -141,61 +142,61 @@ function TableComponent(_ref) {
     var dataId = getId(row);
     onDelete === null || onDelete === void 0 || onDelete(dataId);
   };
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/_react["default"].createElement("div", {
     className: "table_wrapper"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/_react["default"].createElement("div", {
     className: "entries-and-search"
-  }, showPagination && /*#__PURE__*/React.createElement(_ShowEntriesOptions["default"], {
+  }, showPagination && /*#__PURE__*/_react["default"].createElement(_ShowEntriesOptions["default"], {
     rowsPerPage: rowsPerPage,
     setRowsPerPage: setRowsPerPage,
     setCurrentPage: setCurrentPage
-  }), showSearchBar && /*#__PURE__*/React.createElement(_SearchBar["default"], {
+  }), showSearchBar && /*#__PURE__*/_react["default"].createElement(_SearchBar["default"], {
     setFilterText: setFilterText,
     setCurrentPage: setCurrentPage
-  })), /*#__PURE__*/React.createElement("table", {
+  })), /*#__PURE__*/_react["default"].createElement("table", {
     role: "grid"
-  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+  }, /*#__PURE__*/_react["default"].createElement("thead", null, /*#__PURE__*/_react["default"].createElement("tr", {
     role: "row"
   }, columnHeaders.map(function (column, index) {
-    return /*#__PURE__*/React.createElement(_react.Fragment, {
+    return /*#__PURE__*/_react["default"].createElement(_react.Fragment, {
       key: "column-".concat(index)
-    }, column.visible && /*#__PURE__*/React.createElement("th", {
+    }, column.visible && /*#__PURE__*/_react["default"].createElement("th", {
       key: index
-    }, column.name, showSortItem && /*#__PURE__*/React.createElement(_SortItem["default"], {
+    }, column.name, showSortItem && /*#__PURE__*/_react["default"].createElement(_SortItem["default"], {
       setSortConfig: setSortConfig,
       sortConfig: sortConfig,
       index: index
     })));
-  }), onDelete && /*#__PURE__*/React.createElement("th", {
+  }), onDelete && /*#__PURE__*/_react["default"].createElement("th", {
     key: "button-delete"
-  }, "Delete"))), /*#__PURE__*/React.createElement("tbody", null, currentRows.map(function (row, index) {
-    return /*#__PURE__*/React.createElement("tr", {
+  }, "Delete"))), /*#__PURE__*/_react["default"].createElement("tbody", null, currentRows.map(function (row, index) {
+    return /*#__PURE__*/_react["default"].createElement("tr", {
       key: index,
       role: "row",
       className: "row"
     }, row.map(function (field, fieldIndex) {
-      return /*#__PURE__*/React.createElement(_react.Fragment, {
+      return /*#__PURE__*/_react["default"].createElement(_react.Fragment, {
         key: "row-".concat(fieldIndex)
-      }, columnHeaders[fieldIndex].visible && /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement(_Column["default"], {
+      }, columnHeaders[fieldIndex].visible && /*#__PURE__*/_react["default"].createElement("td", null, /*#__PURE__*/_react["default"].createElement(_Column["default"], {
         column: columnHeaders[fieldIndex],
         value: field
       })));
-    }), onDelete && /*#__PURE__*/React.createElement("td", {
+    }), onDelete && /*#__PURE__*/_react["default"].createElement("td", {
       style: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
       }
-    }, /*#__PURE__*/React.createElement("button", {
+    }, /*#__PURE__*/_react["default"].createElement("button", {
       onClick: function onClick() {
         return handleDelete(index);
       },
       type: "button",
       className: "button button-delete"
     }, "X")));
-  }))), showPagination && /*#__PURE__*/React.createElement("div", {
+  }))), showPagination && /*#__PURE__*/_react["default"].createElement("div", {
     className: "info-and-pagination"
-  }, /*#__PURE__*/React.createElement(_Pagination["default"], paginationProps)));
+  }, /*#__PURE__*/_react["default"].createElement(_Pagination["default"], paginationProps)));
 }
 TableComponent.propTypes = {
   headers: _propTypes["default"].array.isRequired,

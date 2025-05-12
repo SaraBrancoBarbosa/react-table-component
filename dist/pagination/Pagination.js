@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+var _react = _interopRequireDefault(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function Pagination(_ref) {
@@ -17,9 +18,9 @@ function Pagination(_ref) {
     _ref$setCurrentPage = _ref.setCurrentPage,
     setCurrentPage = _ref$setCurrentPage === void 0 ? function () {} : _ref$setCurrentPage;
   var pagesCount = Math.ceil(totalItems / itemsPerPage);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, "Showing ", currentItemIndex + 1, " to ", Math.min(currentItemIndex + itemsPerPage, totalItems), " of ", totalItems, " entries"), /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("div", null, "Showing ", currentItemIndex + 1, " to ", Math.min(currentItemIndex + itemsPerPage, totalItems), " of ", totalItems, " entries"), /*#__PURE__*/_react["default"].createElement("div", {
     className: "table-pagination"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/_react["default"].createElement("button", {
     onClick: function onClick() {
       return setCurrentPage(currentPage - 1);
     }
@@ -27,9 +28,9 @@ function Pagination(_ref) {
     ,
     disabled: currentPage === 0,
     className: "previous-page"
-  }, "Previous"), /*#__PURE__*/React.createElement("span", {
+  }, "Previous"), /*#__PURE__*/_react["default"].createElement("span", {
     className: "current-page"
-  }, currentPage + 1), /*#__PURE__*/React.createElement("button", {
+  }, currentPage + 1), /*#__PURE__*/_react["default"].createElement("button", {
     // To forbid the click when on the last page
     onClick: function onClick() {
       return setCurrentPage(currentPage + 1);

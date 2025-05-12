@@ -1,3 +1,5 @@
+import React from "react"
+
 const Column = ({column, value}) => {
     if(column.type === "date") return value instanceof Date ? value.tableDate() : value.toString()
     if(column.type === "number") return "" +value
