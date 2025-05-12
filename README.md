@@ -17,7 +17,7 @@ Install the plugin: <br>
 
 ### Using the Table component
 ```jsx
-import { TableComponent } from "barbosa-react-table-component"
+import TableComponent from "barbosa-react-table-component"
 
 /***
 For the columns you want to filter with the search bar, add "filterable: true"
